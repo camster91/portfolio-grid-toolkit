@@ -1,0 +1,35 @@
+name: PHP CI
+on: [push, pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: PHP syntax
+        run: find . -name '*.php' -not -path './vendor/*' -exec php -l {} +
+      - name: JavaScript syntax
+        run: find assets/js -name '*.js' -exec node --check {} +
+      - name: Portfolio content model contract
+        run: php tests/post-type-test.php
+      - name: Portfolio ordering contract
+        run: php tests/sort-test.php
+      - name: Portfolio shortcode contract
+        run: php tests/shortcode-test.php
+      - name: Scoped asset loading contract
+        run: php tests/assets-test.php
+      - name: Build release archive
+        run: bash scripts/build-plugin.sh
+      - name: Verify release boundary
+        run: |
+          archive="$(find dist -maxdepth 1 -name 'portfolio-grid-toolkit-*.zip' -print -quit)"
+          test -n "$archive"
+          unzip -l "$archive" | grep 'portfolio-grid-toolkit/includes/admin.php'
+          unzip -l "$archive" | grep 'portfolio-grid-toolkit/includes/post-type.php'
+          if unzip -l "$archive" | grep -E 'proof/|\.(mp4|mov)$'; then
+            echo 'Release archive contains proof or raw video media.' >&2
+            exit 1
+          fi
