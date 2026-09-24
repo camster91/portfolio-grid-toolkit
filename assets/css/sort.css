@@ -1,0 +1,142 @@
+/* Portfolio Grid Toolkit Portfolio — Sort Order page */
+.pgtk-sort-wrap {
+    max-width: 900px;
+}
+
+.pgtk-sort-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 12px;
+    margin: 18px 0;
+    padding: 14px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+}
+
+.pgtk-sort-filters label {
+    display: grid;
+    gap: 4px;
+}
+
+.pgtk-sort-filters label span {
+    font-weight: 600;
+}
+
+.pgtk-sort-list {
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.pgtk-sort-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f1;
+    background: #fff;
+    cursor: default;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pgtk-sort-item:last-child {
+    border-bottom: none;
+}
+
+.pgtk-sort-item.ui-sortable-helper {
+    background: #f6f7f7;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.pgtk-sort-item.ui-sortable-placeholder {
+    visibility: visible !important;
+    height: 56px;
+    background: #f0f6fc;
+    border: 1px dashed #2271b1;
+}
+
+.pgtk-sort-handle {
+    cursor: grab;
+    color: #a7aaad;
+    font-size: 18px;
+    line-height: 1;
+    user-select: none;
+    padding: 0 4px;
+}
+
+.pgtk-sort-handle:active {
+    cursor: grabbing;
+}
+
+.pgtk-sort-thumb {
+    flex: 0 0 60px;
+    width: 60px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f0f0f1;
+    border-radius: 3px;
+}
+
+.pgtk-sort-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.pgtk-sort-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #e5e7eb;
+}
+
+.pgtk-sort-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    color: #1d2327;
+    font-size: 14px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pgtk-sort-meta {
+    flex: 0 0 auto;
+    min-width: 36px;
+    color: #646970;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.pgtk-sort-actions {
+    flex: 0 0 auto;
+}
+
+.pgtk-sort-status {
+    min-height: 18px;
+    margin-top: 12px;
+    color: #646970;
+    font-size: 13px;
+}
+
+.pgtk-sort-status.is-saving {
+    color: #2271b1;
+}
+
+.pgtk-sort-status.is-saved {
+    color: #008a20;
+}
+
+.pgtk-sort-status.is-error {
+    color: #d63638;
+}

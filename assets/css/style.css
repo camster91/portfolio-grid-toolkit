@@ -1,0 +1,337 @@
+.pgtk-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.pgtk-container--filters-hidden .pgtk-filters {
+    display: none;
+}
+
+.pgtk-page-title {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font-family: inherit;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+}
+
+.pgtk-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 28px 0 0;
+}
+
+.pgtk-filter-btn {
+    appearance: none;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 7px 12px;
+}
+
+.pgtk-filter-btn.active,
+.pgtk-filter-btn:hover {
+    background: #222;
+    color: #fff;
+}
+
+.pgtk-filter-btn:focus-visible,
+.pgtk-item:focus-visible,
+.pgtk-modal-close:focus-visible {
+    outline: 3px solid #0b5fff;
+    outline-offset: 4px;
+}
+
+/* Grid */
+.pgtk-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+    padding: 24px 0 0;
+}
+
+.pgtk-item {
+    appearance: none;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    background: transparent;
+    color: inherit;
+    display: block;
+    font: inherit;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.pgtk-item:hover,
+.pgtk-item:focus,
+.pgtk-item:active {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: inherit;
+}
+
+.pgtk-item:focus-visible {
+    outline-color: currentColor;
+}
+
+.pgtk-item:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pgtk-item-inner {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 4px;
+}
+
+.pgtk-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #e2e2e2;
+    overflow: hidden;
+}
+
+.pgtk-thumb {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block;
+}
+
+.pgtk-info {
+    position: static;
+    color: inherit;
+    pointer-events: none;
+    text-align: left;
+    padding: 0;
+}
+
+.pgtk-title {
+    margin: 0;
+    color: inherit;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.pgtk-agency {
+    margin: 2px 0 0;
+    color: #555;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.pgtk-empty {
+    color: #555;
+    grid-column: 1 / -1;
+}
+
+/* Native dialog with a viewport-sized backdrop and a safe fallback class. */
+.pgtk-modal {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    box-sizing: border-box;
+    color: #fff;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    max-height: none;
+    max-width: none;
+    padding: 20px;
+    width: 100%;
+}
+
+.pgtk-modal:not([open]):not(.is-open) {
+    display: none;
+}
+
+.pgtk-modal[open],
+.pgtk-modal.is-open {
+    display: flex;
+}
+
+.pgtk-modal.is-open {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+}
+
+.pgtk-modal::backdrop {
+    background: transparent;
+}
+
+.pgtk-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    cursor: pointer;
+}
+
+.pgtk-modal-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    padding: 54px 0 20px;
+    box-sizing: border-box;
+}
+
+.pgtk-modal-title {
+    margin: 0 0 18px;
+    color: #f2f2f2;
+    font-family: inherit;
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.pgtk-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.pgtk-modal-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.pgtk-modal-close svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+}
+
+.pgtk-video-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+    flex-shrink: 0;
+    background: #000;
+}
+
+.pgtk-video-container iframe,
+.pgtk-video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    outline: none !important;
+}
+
+.pgtk-modal-caption {
+    margin-top: 20px;
+    padding: 0;
+    color: #fff;
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 1.6;
+    overflow-y: auto;
+    text-align: left;
+}
+
+.caption-block {
+    margin-bottom: 6px;
+}
+
+.caption-label {
+    display: inline;
+    font-family: inherit;
+    font-weight: 550;
+    letter-spacing: 0.02em;
+}
+
+.caption-value {
+    display: inline;
+    font-family: inherit;
+    font-weight: 400;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .pgtk-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding-top: 24px;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .pgtk-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding-top: 24px;
+    }
+
+    .pgtk-title {
+        font-size: 14px;
+    }
+
+    .pgtk-agency {
+        font-size: 11px;
+    }
+
+    .pgtk-modal-content {
+        padding-top: 54px;
+    }
+
+    .pgtk-modal-caption {
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pgtk-modal-close {
+        transition: none !important;
+    }
+}
