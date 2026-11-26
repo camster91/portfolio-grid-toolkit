@@ -23,7 +23,7 @@ Ashbi Portfolio Grid turns your projects into a clean, filterable grid. Click a 
 **Powerful when you need it**
 
 * Three layouts: grid, bento (big and small tiles) and list.
-* Four presets: Minimal, Editorial, Bold and Glass. One accent color.
+* Four looks: Minimal, Editorial, Bold and Glass. One accent color.
 * Light, dark or automatic colors.
 * Filter buttons from your tags, plus Collections and Artists to group work.
 * Drag and drop to set the order.
@@ -51,13 +51,13 @@ Part of the free Ashbi plugin family, with [Ashbi Mega Menu](https://wordpress.o
 
 `[ashbi_portfolio]`. Grid Studio writes it for you. Examples:
 
-* `[ashbi_portfolio layout="bento" preset="glass" accent="#e4572e"]`
+* `[ashbi_portfolio layout="bento" look="glass" accent="#e4572e"]`
 * `[ashbi_portfolio collection="campaigns" filters="show" limit="6"]`
 * `[ashbi_portfolio artist="creator-slug" variant="artist" heading="Selected work"]`
 
 = What can I set? =
 
-`layout` (grid, bento, list), `preset` (minimal, editorial, bold, glass), `theme` (light, dark, auto), `accent` (a hex color), `columns` (1–6), `limit`, `collection`, `artist`, `category` (a tag), `filters` (show, hide), `heading`, `variant` (work, artist) and `class`.
+`layout` (grid, bento, list), `look` (minimal, editorial, bold, glass), `theme` (light, dark, auto), `accent` (a hex color), `columns` (1–6), `limit`, `collection`, `artist`, `category` (a tag), `filters` (show, hide), `heading`, `variant` (work, artist) and `class`.
 
 = I used Portfolio Grid Toolkit. Do my pages still work? =
 
@@ -73,7 +73,7 @@ Yes. Use a Shortcode widget. In the Elementor editor you see a placeholder. The 
 
 == Screenshots ==
 
-1. Grid Studio: pick a layout, preset and accent, and see your projects update live.
+1. Grid Studio: pick a layout, look and accent, and see your projects update live.
 2. Bento layout on a dark theme.
 3. The project pop-up with video and credits.
 4. Drag-and-drop ordering.
@@ -83,7 +83,7 @@ Yes. Use a Shortcode widget. In the Elementor editor you see a placeholder. The 
 = 1.1.0 =
 * New name: Ashbi Portfolio Grid.
 * New Grid Studio with a live preview and a shortcode that writes itself.
-* New bento and list layouts, four presets, an accent color, and light, dark or auto colors.
+* New bento and list layouts, four looks, an accent color, and light, dark or auto colors.
 * New `[ashbi_portfolio]` shortcode. `[pgtk_work]` still works.
 * Now licensed GPL-2.0-or-later.
 

@@ -91,9 +91,9 @@ function ashbpg_studio_config() {
                 ),
             ),
             array(
-                'key'     => 'preset',
+                'key'     => 'look',
                 'type'    => 'preset',
-                'label'   => __( 'Preset', 'ashbi-portfolio-grid' ),
+                'label'   => __( 'Look', 'ashbi-portfolio-grid' ),
                 'default' => 'minimal',
                 'options' => array(
                     array( 'minimal', __( 'Minimal', 'ashbi-portfolio-grid' ), __( 'Hairlines, no shadow', 'ashbi-portfolio-grid' ) ),
@@ -197,7 +197,7 @@ function ashbpg_studio_config() {
 function ashbpg_preview_atts( $raw ) {
     $raw  = is_array( $raw ) ? $raw : array();
     $atts = array();
-    foreach ( array( 'layout', 'preset', 'theme', 'collection', 'artist' ) as $key ) {
+    foreach ( array( 'layout', 'look', 'theme', 'collection', 'artist' ) as $key ) {
         if ( isset( $raw[ $key ] ) && is_scalar( $raw[ $key ] ) ) {
             $atts[ $key ] = sanitize_key( (string) $raw[ $key ] );
         }
@@ -269,7 +269,7 @@ function ashbpg_render_admin_page() {
             <div class="ashbpg-studio__card">
                 <ol class="ashbpg-studio__steps">
                     <li><strong><?php esc_html_e( 'Add projects', 'ashbi-portfolio-grid' ); ?></strong><?php esc_html_e( 'Title, featured image, video link and credits.', 'ashbi-portfolio-grid' ); ?></li>
-                    <li><strong><?php esc_html_e( 'Design the grid', 'ashbi-portfolio-grid' ); ?></strong><?php esc_html_e( 'Pick a layout, preset and accent below.', 'ashbi-portfolio-grid' ); ?></li>
+                    <li><strong><?php esc_html_e( 'Design the grid', 'ashbi-portfolio-grid' ); ?></strong><?php esc_html_e( 'Pick a layout, look and accent below.', 'ashbi-portfolio-grid' ); ?></li>
                     <li><strong><?php esc_html_e( 'Paste the shortcode', 'ashbi-portfolio-grid' ); ?></strong><?php esc_html_e( 'Works in any theme, block or Elementor page.', 'ashbi-portfolio-grid' ); ?></li>
                 </ol>
             </div>

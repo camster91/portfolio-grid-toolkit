@@ -28,11 +28,11 @@ function ashbpg_register_shortcodes() {
  * Shared look settings, cleaned for output.
  *
  * @param array $atts Raw shortcode attributes.
- * @return array{layout:string,columns:int,preset:string,theme:string,accent:string,class:string}
+ * @return array{layout:string,columns:int,look:string,theme:string,accent:string,class:string}
  */
 function ashbpg_style_settings( $atts ) {
     $layout = sanitize_key( (string) ( $atts['layout'] ?? 'grid' ) );
-    $preset = sanitize_key( (string) ( $atts['preset'] ?? 'minimal' ) );
+    $look = sanitize_key( (string) ( $atts['look'] ?? 'minimal' ) );
     $theme  = sanitize_key( (string) ( $atts['theme'] ?? 'light' ) );
     $accent = sanitize_hex_color( (string) ( $atts['accent'] ?? '' ) );
     $class  = implode( ' ', array_filter( array_map( 'sanitize_html_class', preg_split( '/\s+/', (string) ( $atts['class'] ?? '' ) ) ) ) );
@@ -40,7 +40,7 @@ function ashbpg_style_settings( $atts ) {
     return array(
         'layout'  => in_array( $layout, array( 'grid', 'bento', 'list' ), true ) ? $layout : 'grid',
         'columns' => max( 1, min( 6, (int) ( $atts['columns'] ?? 3 ) ) ),
-        'preset'  => in_array( $preset, array( 'minimal', 'editorial', 'bold', 'glass' ), true ) ? $preset : 'minimal',
+        'look'  => in_array( $look, array( 'minimal', 'editorial', 'bold', 'glass' ), true ) ? $look : 'minimal',
         'theme'   => in_array( $theme, array( 'light', 'dark', 'auto' ), true ) ? $theme : 'light',
         'accent'  => $accent ? $accent : '#2457ff',
         'class'   => $class,
@@ -81,7 +81,7 @@ function ashbpg_work_shortcode( $atts ) {
             'limit'          => '',
             'layout'         => 'grid',
             'columns'        => 3,
-            'preset'         => 'minimal',
+            'look'         => 'minimal',
             'theme'          => 'light',
             'accent'         => '',
             'class'          => '',
@@ -224,7 +224,7 @@ function ashbpg_work_shortcode( $atts ) {
     <section
         class="ashbpg-ui ashbpg-container ashbpg-container--<?php echo esc_attr( $variant ); ?> ashbpg-container--<?php echo esc_attr( $style['layout'] ); ?><?php echo $show_filters ? '' : ' ashbpg-container--filters-hidden'; ?><?php echo $style['class'] ? ' ' . esc_attr( $style['class'] ) : ''; ?>"
         data-ashbpg-instance="<?php echo esc_attr( $instance_id ); ?>"
-        data-ashbpg-preset="<?php echo esc_attr( $style['preset'] ); ?>"
+        data-ashbpg-look="<?php echo esc_attr( $style['look'] ); ?>"
         data-ashbpg-theme="<?php echo esc_attr( $style['theme'] ); ?>"
         style="<?php echo esc_attr( '--ashbpg-accent:' . $style['accent'] . ';--ashbpg-cols:' . $style['columns'] ); ?>"
         aria-label="<?php esc_attr_e( 'Portfolio projects', 'ashbi-portfolio-grid' ); ?>"

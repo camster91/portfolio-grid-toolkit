@@ -307,14 +307,14 @@
     display: block;
 }
 
-/* Editorial preset: a thin accent rule over each title. */
-.ashbpg-ui[data-ashbpg-preset="editorial"] .ashbpg-info {
+/* Editorial look: a thin accent rule over each title. */
+.ashbpg-ui[data-ashbpg-look="editorial"] .ashbpg-info {
     border-top: 2px solid var(--ashbpg-accent);
     padding-top: 10px;
 }
 
-/* Bold preset: accent block behind the text. */
-.ashbpg-ui[data-ashbpg-preset="bold"] .ashbpg-item-inner {
+/* Bold look: accent block behind the text. */
+.ashbpg-ui[data-ashbpg-look="bold"] .ashbpg-item-inner {
     background: var(--ashbpg-accent);
     border-radius: var(--ashbpg-card-radius);
     color: var(--ashbpg-accent-ink);
@@ -346,7 +346,7 @@
     border-radius: 0 0 var(--ashbpg-card-radius) var(--ashbpg-card-radius);
 }
 
-.ashbpg-ui[data-ashbpg-preset="bold"] .ashbpg-layout-bento .ashbpg-item-inner {
+.ashbpg-ui[data-ashbpg-look="bold"] .ashbpg-layout-bento .ashbpg-item-inner {
     padding: 0;
 }
 

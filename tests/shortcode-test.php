@@ -187,18 +187,18 @@ if ( array( 'publish' ) !== $ashbpg_test_query_args['post_status'] ) {
     exit( 1 );
 }
 
-// Shared Ashbi look: preset, theme, accent, columns and layout.
+// Shared Ashbi look: look, theme, accent, columns and layout.
 $styled = ashbpg_work_shortcode(
     array(
         'layout'  => 'bento',
-        'preset'  => 'glass',
+        'look'  => 'glass',
         'theme'   => 'dark',
         'accent'  => '#e4572e',
         'columns' => '4',
         'class'   => 'my-grid <bad>',
     )
 );
-foreach ( array( 'ashbpg-ui', 'data-ashbpg-preset="glass"', 'data-ashbpg-theme="dark"', '--ashbpg-accent:#e4572e;--ashbpg-cols:4', 'ashbpg-layout-bento', 'my-grid' ) as $needle ) {
+foreach ( array( 'ashbpg-ui', 'data-ashbpg-look="glass"', 'data-ashbpg-theme="dark"', '--ashbpg-accent:#e4572e;--ashbpg-cols:4', 'ashbpg-layout-bento', 'my-grid' ) as $needle ) {
     if ( false === strpos( $styled, $needle ) ) {
         fwrite( STDERR, "Styled grid is missing {$needle}.\n" );
         exit( 1 );
@@ -209,8 +209,8 @@ if ( false !== strpos( $styled, '<bad>' ) ) {
     exit( 1 );
 }
 
-$fallback = ashbpg_style_settings( array( 'layout' => 'carousel', 'preset' => 'neon', 'theme' => 'sepia', 'accent' => 'red;}', 'columns' => '99' ) );
-if ( array( 'grid', 'minimal', 'light', '#2457ff', 6 ) !== array( $fallback['layout'], $fallback['preset'], $fallback['theme'], $fallback['accent'], $fallback['columns'] ) ) {
+$fallback = ashbpg_style_settings( array( 'layout' => 'carousel', 'look' => 'neon', 'theme' => 'sepia', 'accent' => 'red;}', 'columns' => '99' ) );
+if ( array( 'grid', 'minimal', 'light', '#2457ff', 6 ) !== array( $fallback['layout'], $fallback['look'], $fallback['theme'], $fallback['accent'], $fallback['columns'] ) ) {
     fwrite( STDERR, "Unknown style values must fall back to safe defaults.\n" );
     exit( 1 );
 }
