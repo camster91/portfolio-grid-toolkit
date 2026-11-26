@@ -7,7 +7,45 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-add_shortcode( 'pgtk_work', 'pgtk_work_shortcode' );
+/**
+ * Shortcode names. `ashbi_portfolio` is the current name; `pgtk_work` keeps
+ * pages built with Portfolio Grid Toolkit 1.0 working.
+ *
+ * @return string[]
+ */
+function ashbpg_shortcode_tags() {
+    return array( 'ashbi_portfolio', 'pgtk_work' );
+}
+
+add_action( 'init', 'ashbpg_register_shortcodes' );
+function ashbpg_register_shortcodes() {
+    foreach ( ashbpg_shortcode_tags() as $tag ) {
+        add_shortcode( $tag, 'ashbpg_work_shortcode' );
+    }
+}
+
+/**
+ * Shared look settings, cleaned for output.
+ *
+ * @param array $atts Raw shortcode attributes.
+ * @return array{layout:string,columns:int,look:string,theme:string,accent:string,class:string}
+ */
+function ashbpg_style_settings( $atts ) {
+    $layout = sanitize_key( (string) ( $atts['layout'] ?? 'grid' ) );
+    $look = sanitize_key( (string) ( $atts['look'] ?? 'minimal' ) );
+    $theme  = sanitize_key( (string) ( $atts['theme'] ?? 'light' ) );
+    $accent = sanitize_hex_color( (string) ( $atts['accent'] ?? '' ) );
+    $class  = implode( ' ', array_filter( array_map( 'sanitize_html_class', preg_split( '/\s+/', (string) ( $atts['class'] ?? '' ) ) ) ) );
+
+    return array(
+        'layout'  => in_array( $layout, array( 'grid', 'bento', 'list' ), true ) ? $layout : 'grid',
+        'columns' => max( 1, min( 6, (int) ( $atts['columns'] ?? 3 ) ) ),
+        'look'  => in_array( $look, array( 'minimal', 'editorial', 'bold', 'glass' ), true ) ? $look : 'minimal',
+        'theme'   => in_array( $theme, array( 'light', 'dark', 'auto' ), true ) ? $theme : 'light',
+        'accent'  => $accent ? $accent : '#2457ff',
+        'class'   => $class,
+    );
+}
 
 /**
  * Render the portfolio grid and its per-instance video dialog.
@@ -21,11 +59,11 @@ add_shortcode( 'pgtk_work', 'pgtk_work_shortcode' );
  * - variant: work|artist. Artist displays the agency credit when supplied.
  * - filters: show|hide the post_tag filter controls.
  */
-function pgtk_work_shortcode( $atts ) {
+function ashbpg_work_shortcode( $atts ) {
     static $instance = 0;
     $instance++;
 
-    $instance_id      = 'pgtk-work-' . $instance;
+    $instance_id      = 'ashbpg-work-' . $instance;
     $modal_id         = $instance_id . '-modal';
     $modal_title_id   = $modal_id . '-title';
     $modal_caption_id = $modal_id . '-caption';
@@ -34,12 +72,19 @@ function pgtk_work_shortcode( $atts ) {
     // Elementor editor. The front-end preview remains available on the page
     // preview route.
     if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-        return '<div style="padding: 40px; background: #f0f0f0; text-align: center; border: 2px dashed #999;"><strong>' . esc_html__( 'Portfolio grid', 'portfolio-grid-toolkit' ) . '</strong><br><em>' . esc_html__( 'View the page preview to see the grid.', 'portfolio-grid-toolkit' ) . '</em></div>';
+        return '<div class="ashbpg-ui"><div class="ashbpg-placeholder"><strong>' . esc_html__( 'Ashbi Portfolio Grid', 'ashbi-portfolio-grid' ) . '</strong>' . esc_html__( 'View the page preview to see the grid.', 'ashbi-portfolio-grid' ) . '</div></div>';
     }
 
     $atts = shortcode_atts(
         array(
             'posts_per_page' => -1,
+            'limit'          => '',
+            'layout'         => 'grid',
+            'columns'        => 3,
+            'look'         => 'minimal',
+            'theme'          => 'light',
+            'accent'         => '',
+            'class'          => '',
             'category'       => '',
             'collection'     => '',
             'artist'         => '',
@@ -48,8 +93,12 @@ function pgtk_work_shortcode( $atts ) {
             'filters'        => 'hide',
         ),
         $atts,
-        'pgtk_work'
+        'ashbi_portfolio'
     );
+    $style = ashbpg_style_settings( $atts );
+    if ( (int) $atts['limit'] > 0 ) {
+        $atts['posts_per_page'] = (int) $atts['limit'];
+    }
 
     $category       = sanitize_title( $atts['category'] );
     $collection     = sanitize_title( $atts['collection'] );
@@ -124,14 +173,14 @@ function pgtk_work_shortcode( $atts ) {
             $title         = get_the_title();
             $agency        = get_post_meta( $post_id, 'subtitle', true );
             $main_video    = esc_url_raw( trim( (string) get_post_meta( $post_id, 'video_link', true ) ) );
-            $thumbnail     = get_the_post_thumbnail_url( $post_id, 'pgtk-thumb' );
+            $thumbnail     = get_the_post_thumbnail_url( $post_id, 'ashbpg-thumb' );
 
             // Thumbnail: fall back to the legacy ACF `image` field when no
             // featured image is set.
             if ( ! $thumbnail ) {
                 $image_id = get_post_meta( $post_id, 'image', true );
                 if ( $image_id ) {
-                    $thumbnail = wp_get_attachment_image_url( (int) $image_id, 'pgtk-thumb' );
+                    $thumbnail = wp_get_attachment_image_url( (int) $image_id, 'ashbpg-thumb' );
                 }
             }
 
@@ -143,12 +192,12 @@ function pgtk_work_shortcode( $atts ) {
 
             $items[] = array(
                 'id'             => $post_id,
-                'title'          => $title ? $title : __( 'Untitled project', 'portfolio-grid-toolkit' ),
+                'title'          => $title ? $title : __( 'Untitled project', 'ashbi-portfolio-grid' ),
                 'agency'         => is_scalar( $agency ) ? (string) $agency : '',
                 'main_video'     => $main_video,
                 'thumbnail'      => $thumbnail ? esc_url( $thumbnail ) : '',
-                'caption_lines'  => pgtk_get_caption_lines( $post_id ),
-                'grid_subtitle'  => 'artist' === $variant ? pgtk_get_artist_grid_subtitle( $post_id ) : '',
+                'caption_lines'  => ashbpg_get_caption_lines( $post_id ),
+                'grid_subtitle'  => 'artist' === $variant ? ashbpg_get_artist_grid_subtitle( $post_id ) : '',
                 'category_slugs' => $category_slugs,
             );
         }
@@ -172,32 +221,39 @@ function pgtk_work_shortcode( $atts ) {
 
     ob_start();
     ?>
-    <section class="pgtk-container pgtk-container--<?php echo esc_attr( $variant ); ?><?php echo $show_filters ? '' : ' pgtk-container--filters-hidden'; ?>" data-pgtk-instance="<?php echo esc_attr( $instance_id ); ?>" aria-label="<?php esc_attr_e( 'Portfolio projects', 'portfolio-grid-toolkit' ); ?>">
+    <section
+        class="ashbpg-ui ashbpg-container ashbpg-container--<?php echo esc_attr( $variant ); ?> ashbpg-container--<?php echo esc_attr( $style['layout'] ); ?><?php echo $show_filters ? '' : ' ashbpg-container--filters-hidden'; ?><?php echo $style['class'] ? ' ' . esc_attr( $style['class'] ) : ''; ?>"
+        data-ashbpg-instance="<?php echo esc_attr( $instance_id ); ?>"
+        data-ashbpg-look="<?php echo esc_attr( $style['look'] ); ?>"
+        data-ashbpg-theme="<?php echo esc_attr( $style['theme'] ); ?>"
+        style="<?php echo esc_attr( '--ashbpg-accent:' . $style['accent'] . ';--ashbpg-cols:' . $style['columns'] ); ?>"
+        aria-label="<?php esc_attr_e( 'Portfolio projects', 'ashbi-portfolio-grid' ); ?>"
+    >
         <?php if ( $heading ) : ?>
-            <h1 class="pgtk-page-title"><?php echo esc_html( $heading ); ?></h1>
+            <h2 class="ashbpg-page-title"><?php echo esc_html( $heading ); ?></h2>
         <?php endif; ?>
         <?php if ( $show_filters && ! empty( $filter_terms ) ) : ?>
-            <nav class="pgtk-filters" aria-label="<?php esc_attr_e( 'Filter portfolio projects', 'portfolio-grid-toolkit' ); ?>">
-                <button class="pgtk-filter-btn active" type="button" data-filter="all" aria-pressed="true">
-                    <?php esc_html_e( 'All', 'portfolio-grid-toolkit' ); ?>
+            <nav class="ashbpg-filters ashbpg-pills" aria-label="<?php esc_attr_e( 'Filter portfolio projects', 'ashbi-portfolio-grid' ); ?>">
+                <button class="ashbpg-filter-btn ashbpg-pill active" type="button" data-filter="all" aria-pressed="true">
+                    <?php esc_html_e( 'All', 'ashbi-portfolio-grid' ); ?>
                 </button>
                 <?php foreach ( $filter_terms as $term ) : ?>
-                    <button class="pgtk-filter-btn" type="button" data-filter="<?php echo esc_attr( $term->slug ); ?>" aria-pressed="false">
+                    <button class="ashbpg-filter-btn ashbpg-pill" type="button" data-filter="<?php echo esc_attr( $term->slug ); ?>" aria-pressed="false">
                         <?php echo esc_html( $term->name ); ?>
                     </button>
                 <?php endforeach; ?>
             </nav>
         <?php endif; ?>
 
-        <div class="pgtk-grid" aria-label="<?php esc_attr_e( 'Portfolio projects', 'portfolio-grid-toolkit' ); ?>">
+        <div class="ashbpg-grid ashbpg-layout-<?php echo esc_attr( $style['layout'] ); ?>" aria-label="<?php esc_attr_e( 'Portfolio projects', 'ashbi-portfolio-grid' ); ?>">
             <?php if ( ! empty( $items ) ) : ?>
                 <?php foreach ( $items as $item ) :
                     $item_classes = implode( ' ', $item['category_slugs'] );
                     $caption       = implode( "\n", $item['caption_lines'] );
-                    $aria_label    = sprintf( __( 'View %s project video', 'portfolio-grid-toolkit' ), $item['title'] );
+                    $aria_label    = sprintf( __( 'View %s project video', 'ashbi-portfolio-grid' ), $item['title'] );
                     ?>
                     <button
-                        class="pgtk-item <?php echo esc_attr( $item_classes ); ?>"
+                        class="ashbpg-item <?php echo esc_attr( $item_classes ); ?>"
                         type="button"
                         data-video="<?php echo esc_url( $item['main_video'] ); ?>"
                         data-caption="<?php echo esc_attr( $caption ); ?>"
@@ -206,40 +262,40 @@ function pgtk_work_shortcode( $atts ) {
                         aria-label="<?php echo esc_attr( $aria_label ); ?>"
                         <?php disabled( ! $item['main_video'] ); ?>
                     >
-                        <span class="pgtk-item-inner">
-                            <span class="pgtk-media">
+                        <span class="ashbpg-item-inner">
+                            <span class="ashbpg-media">
                                 <?php if ( $item['thumbnail'] ) : ?>
-                                    <img src="<?php echo esc_url( $item['thumbnail'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" class="pgtk-thumb" loading="lazy" decoding="async">
+                                    <img src="<?php echo esc_url( $item['thumbnail'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" class="ashbpg-thumb" loading="lazy" decoding="async">
                                 <?php endif; ?>
                             </span>
-                            <span class="pgtk-info">
-                                <<?php echo $heading ? 'h2' : 'h3'; ?> class="pgtk-title"><?php echo esc_html( $item['title'] ); ?></<?php echo $heading ? 'h2' : 'h3'; ?>>
+                            <span class="ashbpg-info">
+                                <span class="ashbpg-title"><?php echo esc_html( $item['title'] ); ?></span>
                                 <?php if ( 'artist' === $variant && $item['grid_subtitle'] ) : ?>
-                                    <p class="pgtk-agency"><?php echo esc_html( $item['grid_subtitle'] ); ?></p>
+                                    <span class="ashbpg-agency ashbpg-muted"><?php echo esc_html( $item['grid_subtitle'] ); ?></span>
                                 <?php elseif ( $item['agency'] ) : ?>
-                                    <p class="pgtk-agency"><?php echo esc_html( $item['agency'] ); ?></p>
+                                    <span class="ashbpg-agency ashbpg-muted"><?php echo esc_html( $item['agency'] ); ?></span>
                                 <?php endif; ?>
                             </span>
                         </span>
                     </button>
                 <?php endforeach; ?>
             <?php else : ?>
-                <p class="pgtk-empty"><?php esc_html_e( 'No work items found.', 'portfolio-grid-toolkit' ); ?></p>
+                <p class="ashbpg-empty"><?php esc_html_e( 'No work items found.', 'ashbi-portfolio-grid' ); ?></p>
             <?php endif; ?>
         </div>
 
-        <dialog class="pgtk-modal" id="<?php echo esc_attr( $modal_id ); ?>" aria-labelledby="<?php echo esc_attr( $modal_title_id ); ?>" aria-describedby="<?php echo esc_attr( $modal_caption_id ); ?>">
-            <div class="pgtk-modal-overlay" data-pgtk-dismiss="true"></div>
-            <div class="pgtk-modal-content">
-                <button class="pgtk-modal-close" type="button" aria-label="<?php esc_attr_e( 'Close project video', 'portfolio-grid-toolkit' ); ?>">
+        <dialog class="ashbpg-modal" id="<?php echo esc_attr( $modal_id ); ?>" aria-labelledby="<?php echo esc_attr( $modal_title_id ); ?>" aria-describedby="<?php echo esc_attr( $modal_caption_id ); ?>">
+            <div class="ashbpg-modal-overlay" data-ashbpg-dismiss="true"></div>
+            <div class="ashbpg-modal-content">
+                <button class="ashbpg-modal-close" type="button" aria-label="<?php esc_attr_e( 'Close project video', 'ashbi-portfolio-grid' ); ?>">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
                 </button>
-                <h2 class="pgtk-modal-title" id="<?php echo esc_attr( $modal_title_id ); ?>"><?php esc_html_e( 'Portfolio project', 'portfolio-grid-toolkit' ); ?></h2>
-                <div class="pgtk-video-container"></div>
-                <div class="pgtk-modal-caption" id="<?php echo esc_attr( $modal_caption_id ); ?>"></div>
+                <h2 class="ashbpg-modal-title" id="<?php echo esc_attr( $modal_title_id ); ?>"><?php esc_html_e( 'Portfolio project', 'ashbi-portfolio-grid' ); ?></h2>
+                <div class="ashbpg-video-container"></div>
+                <div class="ashbpg-modal-caption" id="<?php echo esc_attr( $modal_caption_id ); ?>"></div>
             </div>
         </dialog>
     </section>
@@ -253,7 +309,7 @@ function pgtk_work_shortcode( $atts ) {
  * The browser turns these lines into DOM nodes with textContent, so credits
  * cannot become executable markup through a post meta value.
  */
-function pgtk_get_caption_lines( $post_id ) {
+function ashbpg_get_caption_lines( $post_id ) {
     $credit_fields = array(
         'client'        => 'Client',
         'agency'        => 'Agency',
@@ -299,7 +355,7 @@ function pgtk_get_caption_lines( $post_id ) {
  * Return a single confirmed subtitle for an artist project. Never invent a
  * placeholder credit when no agency or subtitle has been supplied.
  */
-function pgtk_get_artist_grid_subtitle( $post_id ) {
+function ashbpg_get_artist_grid_subtitle( $post_id ) {
     $agency = get_post_meta( $post_id, 'agency', true );
     if ( ! is_scalar( $agency ) || ! trim( (string) $agency ) ) {
         $agency = get_post_meta( $post_id, 'subtitle', true );

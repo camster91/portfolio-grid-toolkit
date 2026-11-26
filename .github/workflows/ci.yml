@@ -21,14 +21,24 @@ jobs:
         run: php tests/shortcode-test.php
       - name: Scoped asset loading contract
         run: php tests/assets-test.php
+      - name: Grid Studio preview contract
+        run: php tests/studio-test.php
+      - name: Ashbi UI kit is built for this plugin
+        run: |
+          test -f assets/ashbi-ui/front.css
+          test -f assets/ashbi-ui/admin.css
+          test -f assets/ashbi-ui/studio.js
+          ! grep -R "__P__" assets/ashbi-ui
       - name: Build release archive
         run: bash scripts/build-plugin.sh
       - name: Verify release boundary
         run: |
-          archive="$(find dist -maxdepth 1 -name 'portfolio-grid-toolkit-*.zip' -print -quit)"
+          archive="$(find dist -maxdepth 1 -name 'ashbi-portfolio-grid-*.zip' -print -quit)"
           test -n "$archive"
-          unzip -l "$archive" | grep 'portfolio-grid-toolkit/includes/admin.php'
-          unzip -l "$archive" | grep 'portfolio-grid-toolkit/includes/post-type.php'
+          unzip -l "$archive" | grep 'ashbi-portfolio-grid/includes/admin.php'
+          unzip -l "$archive" | grep 'ashbi-portfolio-grid/includes/post-type.php'
+          unzip -l "$archive" | grep 'ashbi-portfolio-grid/readme.txt'
+          unzip -l "$archive" | grep 'ashbi-portfolio-grid/assets/ashbi-ui/front.css'
           if unzip -l "$archive" | grep -E 'proof/|\.(mp4|mov)$'; then
             echo 'Release archive contains proof or raw video media.' >&2
             exit 1

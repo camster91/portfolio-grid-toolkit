@@ -1,0 +1,340 @@
+/*!
+ * Ashbi UI kit: front end (1.0.0)
+ * Shared look for every free Ashbi plugin. Built for one plugin with the
+ * "ashbpg" prefix, so two Ashbi plugins on one site never clash.
+ *
+ * Rules: inherit the theme's font and text color, add one accent, keep
+ * every selector inside :where() so a theme can override with one rule.
+ */
+
+/* ---- Tokens ---------------------------------------------------------- */
+:where(.ashbpg-ui) {
+	--ashbpg-accent: #2457ff;
+	--ashbpg-accent-ink: #ffffff;
+	--ashbpg-radius: 12px;
+	--ashbpg-radius-lg: 16px;
+	--ashbpg-pill: 999px;
+	--ashbpg-gap: clamp(16px, 2.5vw, 24px);
+	--ashbpg-pad: clamp(16px, 3vw, 24px);
+	--ashbpg-cols: 3;
+	--ashbpg-cols-now: var(--ashbpg-cols);
+	--ashbpg-surface: color-mix(in srgb, currentColor 4%, transparent);
+	--ashbpg-border: color-mix(in srgb, currentColor 14%, transparent);
+	--ashbpg-muted: color-mix(in srgb, currentColor 68%, transparent);
+	--ashbpg-focus: #ffb568;
+	--ashbpg-card-bg: transparent;
+	--ashbpg-card-ink: inherit;
+	--ashbpg-card-border: 1px solid var(--ashbpg-border);
+	--ashbpg-card-radius: var(--ashbpg-radius);
+	--ashbpg-card-shadow: none;
+	--ashbpg-card-pad: var(--ashbpg-pad);
+	--ashbpg-quote-size: 1em;
+	--ashbpg-pill-bg: transparent;
+	--ashbpg-pill-border: 1px solid var(--ashbpg-border);
+	box-sizing: border-box;
+	color: inherit;
+	font-family: inherit;
+}
+
+:where(.ashbpg-ui) *,
+:where(.ashbpg-ui) *::before,
+:where(.ashbpg-ui) *::after {
+	box-sizing: inherit;
+}
+
+/* ---- Presets: shape and depth only, never fonts or text colors -------- */
+:where(.ashbpg-ui[data-ashbpg-look="editorial"]) {
+	--ashbpg-card-border: 0;
+	--ashbpg-card-radius: 0;
+	--ashbpg-card-pad: 18px 0 0;
+	--ashbpg-quote-size: 1.25em;
+	--ashbpg-pill-border: 0;
+}
+
+:where(.ashbpg-ui[data-ashbpg-look="editorial"]) :where(.ashbpg-card) {
+	border-top: 2px solid var(--ashbpg-accent);
+}
+
+:where(.ashbpg-ui[data-ashbpg-look="bold"]) {
+	--ashbpg-card-bg: var(--ashbpg-accent);
+	--ashbpg-card-ink: var(--ashbpg-accent-ink);
+	--ashbpg-card-border: 0;
+	--ashbpg-card-radius: 18px;
+	--ashbpg-pill-bg: var(--ashbpg-surface);
+	--ashbpg-pill-border: 1px solid transparent;
+}
+
+:where(.ashbpg-ui[data-ashbpg-look="glass"]) {
+	--ashbpg-card-bg: color-mix(in srgb, Canvas 78%, transparent);
+	--ashbpg-card-border: 1px solid color-mix(in srgb, Canvas 90%, transparent);
+	--ashbpg-card-radius: 18px;
+	--ashbpg-card-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 10px 30px rgb(0 0 0 / 0.08);
+}
+
+/* ---- Theme: light inherits the page; dark and auto paint their own ---- */
+:where(.ashbpg-ui[data-ashbpg-theme="dark"]) {
+	color-scheme: dark;
+	color: #eceef2;
+	--ashbpg-card-bg: rgb(255 255 255 / 0.04);
+}
+
+:where(.ashbpg-ui[data-ashbpg-theme="dark"][data-ashbpg-look="glass"]) {
+	--ashbpg-card-bg: rgb(255 255 255 / 0.07);
+	--ashbpg-card-border: 1px solid rgb(255 255 255 / 0.14);
+	--ashbpg-card-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
+}
+
+:where(.ashbpg-ui[data-ashbpg-theme="dark"][data-ashbpg-look="bold"]),
+:where(.ashbpg-ui[data-ashbpg-theme="dark"][data-ashbpg-look="editorial"]) {
+	--ashbpg-card-bg: transparent;
+}
+
+:where(.ashbpg-ui[data-ashbpg-theme="dark"][data-ashbpg-look="bold"]) {
+	--ashbpg-card-bg: var(--ashbpg-accent);
+}
+
+@media (prefers-color-scheme: dark) {
+	:where(.ashbpg-ui[data-ashbpg-theme="auto"]) {
+		color-scheme: dark;
+		--ashbpg-card-bg: rgb(255 255 255 / 0.04);
+	}
+}
+
+/* ---- Layouts ---------------------------------------------------------- */
+:where(.ashbpg-layout-grid) {
+	display: grid;
+	gap: var(--ashbpg-gap);
+	grid-template-columns: repeat(var(--ashbpg-cols-now), minmax(0, 1fr));
+}
+
+:where(.ashbpg-layout-masonry) {
+	column-count: var(--ashbpg-cols-now);
+	column-gap: var(--ashbpg-gap);
+}
+
+:where(.ashbpg-layout-masonry) > * {
+	break-inside: avoid;
+	margin-block-end: var(--ashbpg-gap);
+}
+
+:where(.ashbpg-layout-bento) {
+	display: grid;
+	gap: var(--ashbpg-gap);
+	grid-auto-flow: dense;
+	grid-auto-rows: minmax(160px, auto);
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+:where(.ashbpg-layout-bento) > :nth-child(6n + 1) {
+	grid-column: span 2;
+	grid-row: span 2;
+}
+
+:where(.ashbpg-layout-bento) > :nth-child(6n + 2),
+:where(.ashbpg-layout-bento) > :nth-child(6n + 5) {
+	grid-column: span 2;
+}
+
+:where(.ashbpg-layout-slider) {
+	display: flex;
+	gap: var(--ashbpg-gap);
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	padding-block-end: 8px;
+	scroll-snap-type: x mandatory;
+}
+
+:where(.ashbpg-layout-slider) > * {
+	flex: 0 0 min(320px, 85%);
+	scroll-snap-align: start;
+}
+
+:where(.ashbpg-layout-list) {
+	display: flex;
+	flex-direction: column;
+	gap: calc(var(--ashbpg-gap) / 2);
+}
+
+@media (max-width: 1024px) {
+	:where(.ashbpg-ui) {
+		--ashbpg-cols-now: min(var(--ashbpg-cols), 2);
+	}
+
+	:where(.ashbpg-layout-bento) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 640px) {
+	:where(.ashbpg-ui) {
+		--ashbpg-cols-now: 1;
+	}
+
+	:where(.ashbpg-layout-bento) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	:where(.ashbpg-layout-bento) > * {
+		grid-column: auto !important;
+		grid-row: auto !important;
+	}
+}
+
+/* ---- Components -------------------------------------------------------- */
+:where(.ashbpg-card) {
+	background: var(--ashbpg-card-bg);
+	border: var(--ashbpg-card-border);
+	border-radius: var(--ashbpg-card-radius);
+	box-shadow: var(--ashbpg-card-shadow);
+	color: var(--ashbpg-card-ink);
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: 0;
+	padding: var(--ashbpg-card-pad);
+}
+
+:where(.ashbpg-quote) {
+	font-size: var(--ashbpg-quote-size);
+	line-height: 1.5;
+	margin: 0;
+}
+
+:where(.ashbpg-muted) {
+	color: var(--ashbpg-muted);
+}
+
+:where(.ashbpg-stars) {
+	color: var(--ashbpg-accent);
+	letter-spacing: 0.12em;
+}
+
+:where(.ashbpg-ui[data-ashbpg-look="bold"]) :where(.ashbpg-card .ashbpg-stars) {
+	color: inherit;
+}
+
+:where(.ashbpg-avatar) {
+	align-items: center;
+	background: color-mix(in srgb, var(--ashbpg-accent) 14%, transparent);
+	border-radius: 50%;
+	color: var(--ashbpg-accent);
+	display: inline-grid;
+	flex: none;
+	font-size: 0.8em;
+	font-weight: 700;
+	height: 2.4em;
+	justify-content: center;
+	overflow: hidden;
+	width: 2.4em;
+}
+
+:where(.ashbpg-avatar) img {
+	height: 100%;
+	object-fit: cover;
+	width: 100%;
+}
+
+:where(.ashbpg-pills) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	list-style: none;
+	margin: 0 0 var(--ashbpg-gap);
+	padding: 0;
+}
+
+:where(.ashbpg-pill) {
+	background: var(--ashbpg-pill-bg);
+	border: var(--ashbpg-pill-border);
+	border-radius: var(--ashbpg-pill);
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	font-size: 0.875em;
+	line-height: 1.2;
+	min-height: 36px;
+	padding: 8px 14px;
+}
+
+:where(.ashbpg-pill[aria-pressed="true"], .ashbpg-pill.is-active) {
+	background: var(--ashbpg-accent);
+	border-color: var(--ashbpg-accent);
+	color: var(--ashbpg-accent-ink);
+}
+
+:where(.ashbpg-ui[data-ashbpg-look="editorial"]) :where(.ashbpg-pill[aria-pressed="true"], .ashbpg-pill.is-active) {
+	background: transparent;
+	border-bottom: 2px solid var(--ashbpg-accent);
+	border-radius: 0;
+	color: inherit;
+	font-weight: 600;
+}
+
+:where(.ashbpg-button) {
+	align-items: center;
+	background: var(--ashbpg-accent);
+	border: 1px solid var(--ashbpg-accent);
+	border-radius: calc(var(--ashbpg-radius) - 2px);
+	color: var(--ashbpg-accent-ink);
+	cursor: pointer;
+	display: inline-flex;
+	font: inherit;
+	font-weight: 600;
+	gap: 8px;
+	justify-content: center;
+	min-height: 44px;
+	padding: 10px 18px;
+	text-decoration: none;
+}
+
+:where(.ashbpg-button.is-quiet) {
+	background: transparent;
+	color: inherit;
+	border-color: var(--ashbpg-border);
+}
+
+:where(.ashbpg-badge) {
+	align-items: center;
+	border: 1px solid var(--ashbpg-border);
+	border-radius: var(--ashbpg-pill);
+	display: inline-flex;
+	font-size: 0.875em;
+	gap: 8px;
+	padding: 6px 12px;
+}
+
+:where(.ashbpg-ui) :focus-visible {
+	outline: 3px solid var(--ashbpg-focus);
+	outline-offset: 3px;
+}
+
+/* Page-builder placeholder, used inside Elementor and editor previews. */
+:where(.ashbpg-placeholder) {
+	border: 1px dashed var(--ashbpg-border);
+	border-radius: var(--ashbpg-radius);
+	color: var(--ashbpg-muted);
+	padding: 32px;
+	text-align: center;
+}
+
+:where(.ashbpg-placeholder) strong {
+	color: var(--ashbpg-accent);
+	display: block;
+	margin-block-end: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:where(.ashbpg-ui) *,
+	:where(.ashbpg-ui) *::before,
+	:where(.ashbpg-ui) *::after {
+		animation-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+@media (forced-colors: active) {
+	:where(.ashbpg-card, .ashbpg-pill, .ashbpg-button) {
+		border: 1px solid CanvasText;
+	}
+}

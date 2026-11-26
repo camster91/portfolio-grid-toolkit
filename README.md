@@ -1,21 +1,21 @@
-# Portfolio Grid Toolkit
+# Ashbi Portfolio Grid
 
 A brand-neutral WordPress plugin for managing portfolio projects and showing them as a responsive, filterable video grid with an accessible playback dialog.
 
 ## What it does
 
-Portfolio Grid Toolkit gives editors a `portfolio` content type with structured credits and a video URL, then renders those projects anywhere through a single shortcode. Clicking a project opens a native `<dialog>` that plays the YouTube, Vimeo or direct video file. The plugin only adds content and a shortcode: it does not change the site's homepage, navigation, contact page, SEO metadata or theme layout, and it ships no brand assets, fonts, client media or contact details.
+Ashbi Portfolio Grid gives editors a `portfolio` content type with structured credits and a video URL, then renders those projects anywhere through a single shortcode. Clicking a project opens a native `<dialog>` that plays the YouTube, Vimeo or direct video file. The plugin only adds content and a shortcode: it does not change the site's homepage, navigation, contact page, SEO metadata or theme layout, and it ships no brand assets, fonts, client media or contact details.
 
 ## Features
 
 - **Portfolio post type** with title, featured image, revisions and page attributes. If another plugin or theme already registers `portfolio`, that registration is kept and this plugin only attaches its fields and taxonomies.
 - **Collection and Artist taxonomies** (hierarchical collections, flat artists), plus post tags for front-end filtering.
 - **Project Details meta box**: grid subtitle, main video URL, and client, agency, director, editor and additional production credits. All fields are registered with `register_post_meta`, exposed to the REST API and sanitized on save.
-- **`[pgtk_work]` shortcode** that renders a 3-column grid (2 columns under 1024px, 1 column under 768px) with optional tag filter buttons.
+- **`[ashbi_portfolio]` shortcode** that renders a 3-column grid (2 columns under 1024px, 1 column under 768px) with optional tag filter buttons.
 - **Accessible video dialog**: native `<dialog>` with focus return, Escape to close, a focus-trap fallback for browsers without `showModal()`, and credits rendered with `textContent` so meta values cannot inject markup.
 - **Drag-and-drop Sort Order screen** (jQuery UI Sortable) scoped by status, Collection and Artist. Saves over AJAX and rejects stale or partial orderings.
 - **Admin Overview page** with published and draft counts, quick links and a project checklist.
-- **Scoped asset loading**: the grid CSS and JS load only on singular pages whose content (or Elementor data) contains `[pgtk_work`.
+- **Scoped asset loading**: the grid CSS and JS load only on singular pages whose content (or Elementor data) contains `[ashbi_portfolio`.
 - **Draft previews**: on an authorized WordPress preview, editors also see projects they can edit. Public visitors only see published projects.
 - **Safe uninstall**: projects, terms and credits are site content and are left in place when the plugin is deleted.
 
@@ -32,18 +32,18 @@ Portfolio Grid Toolkit gives editors a `portfolio` content type with structured 
    bash scripts/build-plugin.sh
    ```
 
-   This writes `dist/portfolio-grid-toolkit-<version>.zip` containing only the plugin files. You can also zip the `portfolio-grid-toolkit` directory yourself.
+   This writes `dist/ashbi-portfolio-grid-<version>.zip` containing only the plugin files. You can also zip the `ashbi-portfolio-grid` directory yourself.
 2. In WordPress, go to **Plugins > Add New > Upload Plugin**, upload the zip and activate it.
 3. Add projects under **Portfolios**. Set a featured image and fill in **Project Details** (at least the video URL).
 4. Optionally assign a Collection, Artist and tags, then publish.
 5. Use **Portfolios > Sort Order** to set the display order.
-6. Add `[pgtk_work]` to a page (or an Elementor Shortcode widget).
+6. Add `[ashbi_portfolio]` to a page (or an Elementor Shortcode widget).
 
-Do not activate this alongside another plugin that owns the same `portfolio` content model or the `pgtk_` function prefix. It is a separate plugin, not a drop-in replacement for one that uses different shortcodes or function names.
+Do not activate this alongside another plugin that owns the same `portfolio` content model or the `ashbpg_` function prefix. It is a separate plugin, not a drop-in replacement for one that uses different shortcodes or function names.
 
 ## Usage
 
-`[pgtk_work]` shows all published projects in display order (highest menu order first).
+`[ashbi_portfolio]` shows all published projects in display order (highest menu order first).
 
 | Attribute | Example | Effect |
 |---|---|---|
@@ -58,8 +58,8 @@ Do not activate this alongside another plugin that owns the same `portfolio` con
 Taxonomy filters combine with AND. Examples:
 
 ```text
-[pgtk_work collection="campaigns" filters="show"]
-[pgtk_work artist="creator-slug" heading="Selected work" variant="artist" posts_per_page="6"]
+[ashbi_portfolio collection="campaigns" filters="show"]
+[ashbi_portfolio artist="creator-slug" heading="Selected work" variant="artist" posts_per_page="6"]
 ```
 
 A project without a video URL still appears in the grid, but its button is disabled. If a project has no featured image, the grid falls back to a legacy `image` attachment ID meta field when present.
@@ -75,10 +75,10 @@ A project without a video URL still appears in the grid, but its button is disab
 ## Project structure
 
 ```text
-portfolio-grid-toolkit.php   Plugin header, constants, asset registration
+ashbi-portfolio-grid.php   Plugin header, constants, asset registration
 includes/
   post-type.php              Post type, taxonomies, post meta, meta box, list columns
-  shortcode.php              [pgtk_work] renderer and credit helpers
+  shortcode.php              [ashbi_portfolio] renderer and credit helpers
   sort.php                   Sort Order admin page and AJAX handler
   admin.php                  Overview page and plugin action link
 assets/
@@ -104,4 +104,4 @@ GitHub Actions (`.github/workflows/ci.yml`) runs these on every push and pull re
 
 ## License
 
-MIT. Copyright (c) 2026 Cameron Ashley. See [LICENSE](LICENSE).
+GPL-2.0-or-later. Copyright (c) 2026 Cameron Ashley. See [LICENSE](LICENSE). Versions before 1.1.0 were released under MIT.

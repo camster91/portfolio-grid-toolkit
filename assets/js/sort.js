@@ -1,14 +1,14 @@
-/* global PortfolioGridToolkitSort */
+/* global AshbiPortfolioGridSort */
 (function ($) {
     'use strict';
 
     $(function () {
-        var $list = $('#pgtk-sort-list');
-        if (!$list.length || typeof PortfolioGridToolkitSort === 'undefined') {
+        var $list = $('#ashbpg-sort-list');
+        if (!$list.length || typeof AshbiPortfolioGridSort === 'undefined') {
             return;
         }
 
-        var $status = $('#pgtk-sort-status');
+        var $status = $('#ashbpg-sort-status');
         var saveTimer = null;
         var inFlight = false;
         var pendingSave = false;
@@ -31,7 +31,7 @@
         function renumberMeta() {
             var total = $list.children('li').length;
             $list.children('li').each(function (index) {
-                $(this).find('.pgtk-sort-meta').text('#' + (total - index));
+                $(this).find('.ashbpg-sort-meta').text('#' + (total - index));
             });
         }
 
@@ -42,19 +42,19 @@
             }
 
             inFlight = true;
-            setStatus(PortfolioGridToolkitSort.i18n.saving, 'saving');
+            setStatus(AshbiPortfolioGridSort.i18n.saving, 'saving');
 
-            $.post(PortfolioGridToolkitSort.ajaxUrl, {
-                action: 'pgtk_save_order',
-                nonce: PortfolioGridToolkitSort.nonce,
+            $.post(AshbiPortfolioGridSort.ajaxUrl, {
+                action: 'ashbpg_save_order',
+                nonce: AshbiPortfolioGridSort.nonce,
                 order: collectOrder().join(','),
-                post_status: PortfolioGridToolkitSort.context.postStatus,
-                collection: PortfolioGridToolkitSort.context.collection,
-                artist: PortfolioGridToolkitSort.context.artist
+                post_status: AshbiPortfolioGridSort.context.postStatus,
+                collection: AshbiPortfolioGridSort.context.collection,
+                artist: AshbiPortfolioGridSort.context.artist
             })
                 .done(function (response) {
                     if (response && response.success) {
-                        setStatus(PortfolioGridToolkitSort.i18n.saved, 'saved');
+                        setStatus(AshbiPortfolioGridSort.i18n.saved, 'saved');
                         if (saveTimer) {
                             clearTimeout(saveTimer);
                         }
@@ -62,11 +62,11 @@
                             $status.text('').removeClass('is-saved');
                         }, 1800);
                     } else {
-                        setStatus(PortfolioGridToolkitSort.i18n.error, 'error');
+                        setStatus(AshbiPortfolioGridSort.i18n.error, 'error');
                     }
                 })
                 .fail(function () {
-                    setStatus(PortfolioGridToolkitSort.i18n.error, 'error');
+                    setStatus(AshbiPortfolioGridSort.i18n.error, 'error');
                 })
                 .always(function () {
                     inFlight = false;
@@ -78,8 +78,8 @@
         }
 
         $list.sortable({
-            handle: '.pgtk-sort-handle',
-            placeholder: 'ui-sortable-placeholder pgtk-sort-item',
+            handle: '.ashbpg-sort-handle',
+            placeholder: 'ui-sortable-placeholder ashbpg-sort-item',
             tolerance: 'pointer',
             axis: 'y',
             opacity: 0.9,
